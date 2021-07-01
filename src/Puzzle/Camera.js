@@ -63,8 +63,8 @@ class PictureCamera extends UIObject {
 		//Bounds
 		if (this.zoom > ZOOM_MAX)
 			this.zoom = ZOOM_MAX;
-		else if (this.zoom < this.minZoom)
-			this.zoom = this.minZoom;
+		else if (this.zoom < this.zoomMin)
+			this.zoom = this.zoomMin;
 	}
 	drawFullPicture(pic) {
 		ctx.drawImage(pic, this.worldToScreenX(0), this.worldToScreenY(0), this.worldToScreenWidth(pic.width), this.worldToScreenHeight(pic.height));

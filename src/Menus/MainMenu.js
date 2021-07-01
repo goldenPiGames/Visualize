@@ -7,8 +7,10 @@ class MainMenu extends Screen {
 		super();
 		//recommendSongs(SONGREC.mainMenu);
 		this.playButton = new Button({lText:"MainMenu-Play", func:()=>doPictureSelect()}),
+		this.visitZenonButton = new Button({lText:"MainMenu-VisitZenon", func:()=>window.open("http://practicalgeeks.com/photo/index.html")}),
 		this.buttons = [
 			this.playButton,
+			this.visitZenonButton,
 		];
 	}
 	update() {
@@ -22,10 +24,10 @@ class MainMenu extends Screen {
 		ctx.textAlign = "left";
 		ctx.textBaseline = "bottom";
 		ctx.font = "16px " + settings.font;
-		drawTextInRect("©2021 goldenPiGames & Zenon Revolution", 3, canvas.height-20, mainCanvas.width/2, 20, {align:"left", fill:palette.normal, stroke:palette.background});
+		drawTextInRect("©2021 goldenPiGames & L. Zenon", 3, canvas.height-20, mainCanvas.width/2, 20, {align:"left", fill:palette.normal, stroke:palette.background});
 	}
 	resize() {
-		([this.playButton]).forEach((b, i)=>b.resize(canvas.width/20, canvas.height/2 + canvas.height/10*i, canvas.width*2/5, canvas.height/15));
+		([this.playButton, this.visitZenonButton]).forEach((b, i)=>b.resize(canvas.width/20, canvas.height/2 + canvas.height/10*i, canvas.width*2/5, canvas.height/15));
 	}
 }
 MainMenu.prototype.overrideTouch = false;

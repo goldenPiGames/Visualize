@@ -168,7 +168,7 @@ function controlMenuClick(e) {
 }
 
 function disableRightClick() {
-	backDiv.removeEventListener("contextmenu", controlMenuClick);
+	rightClickDisabled = true;
 }
 
 function attemptFullscreen() {

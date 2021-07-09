@@ -16,15 +16,18 @@ class PictureCamera extends UIObject {
 		this.screenCenterX = this.x + this.width/2;
 		this.screenCenterY = this.y + this.height/2;
 		this.zoomMin = Math.min(this.width/this.worldWidth, this.height/this.worldHeight);
+		this.updateBounds();
 	}
 	setMax(w, h) {
 		this.worldWidth = w;
 		this.worldHeight = h;
+		this.updateBounds();
 	}
 	showFull() {
 		this.centerX = this.worldWidth/2;
 		this.centerY = this.worldHeight/2;
 		this.zoom = this.zoomMin;
+		this.updateBounds();
 	}
 	setScreenCenter(x, y) {
 		this.screenCenterX = x;
@@ -36,6 +39,7 @@ class PictureCamera extends UIObject {
 		this.moveMouse();
 	}
 	move() {
+		let lastZoom = this.zoom;
 		//Mouse
 		if (mouse.middleDown || mouse.rightDown) {
 			this.centerX -= mouse.movedX / this.zoom || 0;
@@ -65,6 +69,16 @@ class PictureCamera extends UIObject {
 			this.zoom = ZOOM_MAX;
 		else if (this.zoom < this.zoomMin)
 			this.zoom = this.zoomMin;
+		if (this.zoom != lastZoom)
+			this.updateBounds();
+		if (this.centerX < this.centerBoundLeft)
+			this.centerX = this.centerBoundLeft;
+		else if (this.centerX > this.centerBoundRight)
+			this.centerX = this.centerBoundRight;
+		if (this.centerY < this.centerBoundTop)
+			this.centerY = this.centerBoundTop;
+		else if (this.centerY > this.centerBoundBottom)
+			this.centerY = this.centerBoundBottom;
 	}
 	drawFullPicture(pic) {
 		ctx.drawImage(pic, this.worldToScreenX(0), this.worldToScreenY(0), this.worldToScreenWidth(pic.width), this.worldToScreenHeight(pic.height));
@@ -79,6 +93,22 @@ class PictureCamera extends UIObject {
 	moveMouse() {
 		this.mouseX = this.screenToWorldX(mouse.x);
 		this.mouseY = this.screenToWorldY(mouse.y);
+	}
+	updateBounds() {
+		if (this.worldWidth * this.zoom > this.width) {
+			this.centerBoundLeft = (this.screenCenterX - this.x) / this.zoom;
+			this.centerBoundRight = this.worldWidth - (this.x + this.width - this.screenCenterX) / this.zoom;
+		} else {
+			this.centerBoundLeft = this.worldWidth / 2;
+			this.centerBoundRight = this.worldWidth / 2;
+		}
+		if (this.worldHeight * this.zoom > this.height) {
+			this.centerBoundTop = (this.screenCenterY - this.y) / this.zoom;
+			this.centerBoundBottom = this.worldHeight - (this.y + this.height - this.screenCenterY) / this.zoom;
+		} else {
+			this.centerBoundTop = this.worldHeight / 2;
+			this.centerBoundBottom = this.worldHeight / 2;
+		}
 	}
 	screenToWorldX(x) {
 		return this.centerX + (x - this.screenCenterX) / this.zoom;
